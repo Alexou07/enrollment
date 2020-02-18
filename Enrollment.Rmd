@@ -1,0 +1,21 @@
+---
+title: "Enrollment"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+#terminal commands
+# ls ~/Documents/School/Gov_1005/enrollment/class_enrollment_summary_by_term2.18.20.xlsx
+# mv ~/Documents/School/Gov_1005/enrollment/class_enrollment_summary_by_term2.18.20.xlsx .
+
+
+enrollment <- read_xlsx(path = "class_enrollment_summary_by_term2.18.20.xlsx", skip=3)
+
+```

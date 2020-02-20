@@ -8,6 +8,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readxl)
 library(tidyverse)
 library(janitor)
+library(reprex)
+library(gt)
+
 ```
 
 ```{r}
@@ -15,7 +18,25 @@ library(janitor)
 # ls ~/Documents/School/Gov_1005/enrollment/class_enrollment_summary_by_term2.18.20.xlsx
 # mv ~/Documents/School/Gov_1005/enrollment/class_enrollment_summary_by_term2.18.20.xlsx .
 
+spring_2020 <- read_xlsx(path = "class_enrollment_summary_by_term2.18.20.xlsx", skip=3) %>%
+  clean_names()
 
-enrollment <- read_xlsx(path = "class_enrollment_summary_by_term2.18.20.xlsx", skip=3)
+enrollment <- spring_2020 %>%
+  filter(!is.na(course_name)) %>%
+  group_by(course_department) %>%
+  summarize(cdtotal = sum(total)) %>%
+  arrange(desc(cdtotal)) %>%
+  slice(1:5)
+  
+```
+
+```{r}
+
+spring_2019 <- read_xlsx(path = "class_enrollment_summary_by_term_3.22.19_0.xlsx", skip=3) %>%
+  clean_names() %>%
+  filter(!is.na(course_name))
+
+total_course <- left_join(spring_2020, spring_2019, by = "course_id") %>%
+  filter(!is.na(course_id))
 
 ```

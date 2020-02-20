@@ -370,8 +370,21 @@ summary {
 # ls ~/Documents/School/Gov_1005/enrollment/class_enrollment_summary_by_term2.18.20.xlsx
 # mv ~/Documents/School/Gov_1005/enrollment/class_enrollment_summary_by_term2.18.20.xlsx .
 
+spring_2020 &lt;- read_xlsx(path = &quot;class_enrollment_summary_by_term2.18.20.xlsx&quot;, skip=3) %&gt;%
+  clean_names()
 
-enrollment &lt;- read_xlsx(path = &quot;class_enrollment_summary_by_term2.18.20.xlsx&quot;, skip=3)</code></pre>
+enrollment &lt;- spring_2020 %&gt;%
+  filter(!is.na(course_name)) %&gt;%
+  group_by(course_department) %&gt;%
+  summarize(cdtotal = sum(total)) %&gt;%
+  arrange(desc(cdtotal)) %&gt;%
+  slice(1:5)</code></pre>
+<pre class="r"><code>spring_2019 &lt;- read_xlsx(path = &quot;class_enrollment_summary_by_term_3.22.19_0.xlsx&quot;, skip=3) %&gt;%
+  clean_names() %&gt;%
+  filter(!is.na(course_name))
+
+total_course &lt;- left_join(spring_2020, spring_2019, by = &quot;course_id&quot;) %&gt;%
+  filter(!is.na(course_id))</code></pre>
 
 
 
